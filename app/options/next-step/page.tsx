@@ -17,7 +17,7 @@ export default function NextStepPage() {
 
   const handleSubmit = () => {
     if (formData.diagnostico.trim() && formData.examen.trim()) {
-      localStorage.setItem('examen', formData.examen);
+      localStorage.setItem('examen', formData.examen.toUpperCase());
       // Aquí iría la lógica de envío
     }
   };
@@ -25,6 +25,7 @@ export default function NextStepPage() {
   const handleBack = () => {
     router.push('/options');
   };
+
 
   if (diagnostico === 'DM3' || diagnostico === 'DM4') {
     return (

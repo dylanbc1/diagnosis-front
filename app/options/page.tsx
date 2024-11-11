@@ -1,4 +1,5 @@
 'use client'
+import CurrentInfo from '@/components/CurrentInfo';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -8,16 +9,18 @@ export default function DiagnosticoOpciones() {
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
-    localStorage.setItem('diagnostico', option);
+    localStorage.setItem('diagnostico', option.toUpperCase());
     router.push(`/options/next-step`);
   };
 
   const diagnosticos = [
-    { id: 'ACV', label: 'ACV', description: 'Accidente Cerebrovascular' },
-    { id: 'DM1', label: 'DM1', description: 'Diabetes Mellitus Tipo 1' },
-    { id: 'DM2', label: 'DM2', description: 'Diabetes Mellitus Tipo 2' },
-    { id: 'DM3', label: 'DM3', description: 'Diabetes Mellitus Tipo 3' },
-    { id: 'DM4', label: 'DM4', description: 'Diabetes Mellitus Tipo 4' },
+    { id: 'acv', label: 'ACV', description: 'Ataque Cerebrovascular' },
+    { id: 'ACV Isquémico', label: 'ACV Isquémico', description: ''},
+    { id: 'ACV Hemorrágico', label: 'ACV Hemorrágico', description: ''},
+    { id: 'Meningitis Aséptica', label: 'Meningitis Aséptica', description: 'Infección de S.N.C.' },
+    { id: 'Astrocitoma', label: 'Astrocitoma', description: 'Tumor Cerebral' },
+    { id: 'Meningioma', label: 'Meningioma', description: 'Tumor Cerebral' },
+    { id: 'Encefalopatía Hipertensiva', label: 'Encefalopatía Hipertensiva', description: 'Crisis Hipertensiva con Encefalopatía' },
     { id: 'Otra', label: 'Otra opción', description: 'Especificar otro diagnóstico' },
   ];
 
@@ -42,17 +45,10 @@ export default function DiagnosticoOpciones() {
         </div>
       </div>
 
-      {/* Current Case Info */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-          <p className="text-center text-blue-800">
-            Caso Clínico: <span className="font-semibold">{localStorage.getItem('grupo') || 'No seleccionado'}</span>
-          </p>
-        </div>
-      </div>
+      <CurrentInfo localStorage_item="grupo"/>
 
       <h1 className="text-3xl font-bold text-slate-800 mb-8 text-center">
-        Selecciona un diagnóstico
+        Selecciona un diagnóstico etiológico
       </h1>
       
       <div className="max-w-6xl mx-auto">

@@ -14,7 +14,7 @@ const HomePage = () => {
 
   const handleStart = () => {
     if (grupo) {
-      localStorage.setItem('grupo', grupo);
+      localStorage.setItem('grupo', grupo.toUpperCase());
       router.push('/options');
     } else {
       // Toast notification would be better here
@@ -43,7 +43,9 @@ const HomePage = () => {
             onChange={handleGroupChange}
           >
             <option value="" disabled>Seleccione su grupo</option>
-            {['Grupo 1', 'Grupo 2', 'Grupo 3', 'Grupo 4', 'Grupo 5', 'Grupo 6'].map((g) => (
+            {['BP2 - David Mera y Juan Diego Jaramillo', 'BP3 - Juliana Gonzalez, Maria Paz Chavarro y Alejandra Barrera', 
+            'BP8 - Isabella Tovar, Gabriela Pino y Sebastián Moya', 'BP9 - Miguel Tejada, Alejandro Angulo y Samuel Daza', 
+            'BP10 - Luna Orozco, Valentina Valderrama, Angie Suárez y Juliana Lozano'].map((g) => (
               <option key={g} value={g.toLowerCase().replace(' ', '')}>{g}</option>
             ))}
           </select>
