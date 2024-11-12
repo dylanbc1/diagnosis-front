@@ -12,9 +12,15 @@ export default function CurrentInfo ({ localStorage_item }: CurrentInfoProps) {
                 <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
                     <p className="text-center text-blue-800">
                         {localStorage_item == 'grupo' ?
-                            context = "Grupo Rotación"
+                            context = "Grupo rotación"
                         :
-                            context = "Diagnóstico Seleccionado"
+                            <>
+                                {localStorage_item == 'examen' ? 
+                                    context = "Pruebas diagnósticas seleccionadas"
+                                :
+                                    context = "Diagnóstico seleccionado"
+                                }
+                            </>
                         }: <span className="font-semibold">{localStorage.getItem(localStorage_item) || 'No seleccionado'}</span>
                     </p>
                 </div>

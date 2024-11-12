@@ -25,14 +25,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        
-      >
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
-        <div className="max-w-4xl mx-auto p-6">
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {/* Contenedor de fondo */}
+        <div className="relative min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+          {/* Imagen de fondo */}
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-60"
+            style={{
+              backgroundImage: "url('https://res.cloudinary.com/dxhi8xsyb/image/upload/v1731363405/propuesta2_mhnzja.jpg')",
+            }}
+          ></div>
+          
+          {/* Contenido principal con opacidad para asegurarse que es legible */}
+          <div className="relative max-w-4xl mx-auto p-6 bg-white bg-opacity-90 shadow-lg">
+            {children}
           </div>
-          </div>
+        </div>
       </body>
     </html>
   );

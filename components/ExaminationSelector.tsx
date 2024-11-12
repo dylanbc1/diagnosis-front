@@ -1,7 +1,9 @@
-import { useState } from 'react';
+'use client'
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import CurrentInfo from './CurrentInfo';
+import ProgressSteps from './ProgressSteps';
 
 interface Props {
   diagnostico: string;
@@ -9,30 +11,29 @@ interface Props {
 
 const ExaminationSelector = ({ diagnostico }: Props) => {
   const router = useRouter();
-  const [selectedExam, setSelectedExam] = useState('');
+  const [selectedExams, setSelectedExams] = useState<string[]>([]);
 
-  const handleExamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedExam(e.target.value);
-    localStorage.setItem('examen', e.target.value);
+  useEffect(() => {
+    const storedExams = JSON.parse(localStorage.getItem('examen') || '[]');
+    if (Array.isArray(storedExams)) setSelectedExams(storedExams);
+  }, []);
+
+  const toggleExamSelection = (exam: string) => {
+    setSelectedExams((prev) => {
+      const updatedExams = prev.includes(exam) 
+        ? prev.filter((e) => e !== exam) 
+        : [...prev, exam];
+      localStorage.setItem('examen', JSON.stringify(updatedExams));
+      return updatedExams;
+    });
   };
 
-  const handleSubmit = async () => {
-    const grupo = localStorage.getItem('grupo');
-    const examen = localStorage.getItem('examen');
-
-    try {
-      await axios.post('http://localhost:8000/api/v1/diagnostico', {
-        grupo,
-        diagnostico,
-        examen,
-      });
-      alert('Respuesta enviada con éxito');
-    } catch (error) {
-      console.error(error);
-    }
+  const handleSubmit = () => {
+    router.push('/options/comment')
   };
 
   const handleBack = () => {
+    localStorage.setItem('examen', JSON.stringify([]))
     router.push('/options');
   };
 
@@ -81,24 +82,7 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
 
   return (
     <div className="py-8">
-      {/* Progress Steps */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <div className="flex items-center justify-center gap-4">
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
-              1
-            </div>
-            <div className="ml-2 text-blue-500 font-semibold">Diagnóstico</div>
-          </div>
-          <div className="w-16 h-0.5 bg-blue-500" />
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold border-4 border-blue-100">
-              2
-            </div>
-            <div className="ml-2 text-blue-500 font-semibold">Examen</div>
-          </div>
-        </div>
-      </div>
+      <ProgressSteps currentStep='two'></ProgressSteps>
 
       <CurrentInfo localStorage_item="diagnostico"/>
 
@@ -106,23 +90,17 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
         Selecciona las pruebas diagnósticas a realizar
       </h1>
 
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {diagnostico == 'MENINGITIS ASÉPTICA' ? 
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        {diagnostico == 'ACV' || diagnostico == 'ACV ISQUÉMICO' || diagnostico == 'ACV HEMORRÁGICO' ?
+          
           <>
-            {examenes_meningitis.map((exam) => (
+          {examenes_acv.map((exam) => (
             <button
               key={exam.value}
-              onClick={() => {
-                setSelectedExam(exam.value);
-                localStorage.setItem('examen', exam.value);
-              }}
-              className={`p-6 rounded-xl shadow-sm border
-                       transition-all duration-200 text-left hover:border-blue-500 hover:shadow-md hover:bg-blue-50
-                       ${selectedExam === exam.value 
-                         ? 'bg-blue-50 border-blue-500 shadow-md ' 
-                         : 'bg-white border-slate-100 hover:border-blue-500 hover:shadow-md'
-                       }`}
+              onClick={() => toggleExamSelection(exam.value)}
+              className={`p-6 rounded-xl shadow-sm border transition-all duration-200 text-left hover:bg-blue-50 hover:border-blue-500 
+                hover:shadow-md
+                ${selectedExams.includes(exam.value) ? 'bg-blue-50 border-blue-500 shadow-md' : 'bg-white border-slate-100'}`}
             >
               <h3 className="text-lg font-semibold text-slate-800 mb-2">
                 {exam.label}
@@ -133,40 +111,123 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
             </button>
           ))}
           </>
-          
-          :
-          
+        :
           <>
-            {diagnostico == 'ACV' || diagnostico == 'ACV ' ? <></> : <></>}
+            {diagnostico == 'MENINGITIS ASÉPTICA' ? 
+              <>
+                {examenes_meningitis.map((exam) => (
+                  <button
+                  key={exam.value}
+                  onClick={() => toggleExamSelection(exam.value)}
+                  className={`p-6 rounded-xl shadow-sm border transition-all duration-200 text-left hover:bg-blue-50 hover:border-blue-500 
+                    hover:shadow-md
+                    ${selectedExams.includes(exam.value) ? 'bg-blue-50 border-blue-500 shadow-md' : 'bg-white border-slate-100'}`}
+                    >
+                  <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                    {exam.label}
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    {exam.description}
+                  </p>
+                  </button>
+                ))}
+              </>
+            :
+                <>
+                  {diagnostico == 'MENINGIOMA' ? 
+                    <>
+                      {examenes_meningioma.map((exam) => (
+                        <button
+                          key={exam.value}
+                          onClick={() => toggleExamSelection(exam.value)}
+                          className={`p-6 rounded-xl shadow-sm border transition-all duration-200 text-left hover:bg-blue-50 hover:border-blue-500 
+                            hover:shadow-md
+                            ${selectedExams.includes(exam.value) ? 'bg-blue-50 border-blue-500 shadow-md' : 'bg-white border-slate-100'}`}
+                          >
+                          <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                            {exam.label}
+                          </h3>
+                          <p className="text-sm text-slate-600">
+                            {exam.description}
+                          </p>
+                          </button>
+                      ))}
+                    </>
+                  :
+                    <>
+                      {diagnostico == 'ASTROCITOMA' ? 
+                        <>
+                          {examenes_astrocitoma.map((exam) => (
+                        <button
+                          key={exam.value}
+                          onClick={() => toggleExamSelection(exam.value)}
+                          className={`p-6 rounded-xl shadow-sm border transition-all duration-200 text-left hover:bg-blue-50 hover:border-blue-500 
+                            hover:shadow-md
+                            ${selectedExams.includes(exam.value) ? 'bg-blue-50 border-blue-500 shadow-md' : 'bg-white border-slate-100'}`}
+                          >
+                          <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                            {exam.label}
+                          </h3>
+                          <p className="text-sm text-slate-600">
+                            {exam.description}
+                          </p>
+                          </button>
+                      ))}
+                        </>
+                      :
+                        <>
+                          {diagnostico == 'ENCEFALOPATÍA HIPERTENSIVA' ? 
+                            <>
+                              {examenes_encefalopatia.map((exam) => (
+                                <button
+                                  key={exam.value}
+                                  onClick={() => toggleExamSelection(exam.value)}
+                                  className={`p-6 rounded-xl shadow-sm border transition-all duration-200 text-left hover:bg-blue-50 hover:border-blue-500 
+                                  hover:shadow-md
+                                  ${selectedExams.includes(exam.value) ? 'bg-blue-50 border-blue-500 shadow-md' : 'bg-white border-slate-100'}`}
+                                >
+                                <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                                  {exam.label}
+                                </h3>
+                                <p className="text-sm text-slate-600">
+                                  {exam.description}
+                                </p>
+                                </button>
+                              ))}
+                            </>
+                          :
+                            <>
+                            </>
+                          }
+                        </>
+                      }
+                    </>
+                  }
+                </>
+            }
           </>
-          
-          }
-        </div>
+        }
+      </div>
 
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={handleBack}
-            className="px-6 py-3 bg-white rounded-xl shadow-sm border border-blue-500 
-                     hover:shadow-md
-                     transition-all duration-200 text-blue-600 font-semibold
-                     min-w-[200px]"
-          >
-            Volver a diagnósticos
-          </button>
-          
-          <button
-            onClick={handleSubmit}
-            disabled={!selectedExam}
-            className="px-6 py-3 bg-blue-500 rounded-xl shadow-sm
-                     hover:bg-blue-600 hover:shadow-md
-                     transition-all duration-200 text-white font-semibold
-                     min-w-[200px]
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     disabled:hover:bg-blue-500 disabled:hover:shadow-sm"
-          >
-            Enviar Respuesta
-          </button>
-        </div>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={handleBack}
+          className="px-6 py-3 bg-white rounded-xl shadow-sm border border-blue-500 
+                   hover:shadow-md transition-all duration-200 text-blue-600 font-semibold
+                   min-w-[200px]"
+        >
+          Volver a diagnósticos
+        </button>
+        
+        <button
+          onClick={handleSubmit}
+          disabled={selectedExams.length === 0}
+          className="px-6 py-3 bg-blue-500 rounded-xl shadow-sm hover:bg-blue-600 hover:shadow-md
+                   transition-all duration-200 text-white font-semibold min-w-[200px]
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Siguiente
+        </button>
       </div>
     </div>
   );

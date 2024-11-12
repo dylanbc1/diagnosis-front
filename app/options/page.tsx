@@ -1,5 +1,6 @@
 'use client'
 import CurrentInfo from '@/components/CurrentInfo';
+import ProgressSteps from '@/components/ProgressSteps';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -10,8 +11,13 @@ export default function DiagnosticoOpciones() {
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
     localStorage.setItem('diagnostico', option.toUpperCase());
-    router.push(`/options/next-step`);
+    router.push(`/options/test`);
   };
+
+  const handleBack = () => {
+    localStorage.clear();
+    router.push(`/`);
+  }
 
   const diagnosticos = [
     { id: 'acv', label: 'ACV', description: 'Ataque Cerebrovascular' },
@@ -26,24 +32,7 @@ export default function DiagnosticoOpciones() {
 
   return (
     <div className="py-8">
-      {/* Progress Steps */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <div className="flex items-center justify-center gap-4">
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold border-4 border-blue-100">
-              1
-            </div>
-            <div className="ml-2 text-blue-500 font-semibold">Diagnóstico</div>
-          </div>
-          <div className="w-16 h-0.5 bg-slate-200" />
-          <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-semibold">
-              2
-            </div>
-            <div className="ml-2 text-slate-400 font-semibold">Examen</div>
-          </div>
-        </div>
-      </div>
+      <ProgressSteps currentStep='one'></ProgressSteps>
 
       <CurrentInfo localStorage_item="grupo"/>
 
@@ -73,6 +62,17 @@ export default function DiagnosticoOpciones() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="flex flex-shrink gap-4 pt-4">
+            <button 
+              onClick={handleBack}
+              className="flex-1 px-6 py-3 bg-white rounded-xl shadow-sm border
+                       border-blue-500 hover:shadow-md
+                       transition-all duration-200 text-blue-600 font-semibold"
+            >
+              Volver a grupos
+            </button>
       </div>
     </div>
   );
