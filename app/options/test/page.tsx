@@ -7,19 +7,23 @@ import ProgressSteps from '@/components/ProgressSteps';
 export default function NextStepPage() {
   const router = useRouter();
   const [diagnostico, setDiagnostico] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
   const [formData, setFormData] = useState({
     diagnostico: '',
     examen: ''
   });
 
   useEffect(() => {
-    setDiagnostico(localStorage.getItem('diagnostico'));
+    setIsClient(true);
+    // Solo accedemos a localStorage después de confirmar que estamos en el cliente
+    const storedDiagnostico = window.localStorage.getItem('diagnostico');
+    setDiagnostico(storedDiagnostico);
   }, []);
 
   const handleSubmit = () => {
     if (formData.diagnostico.trim() && formData.examen.trim()) {
-      localStorage.setItem('examen', formData.examen.toUpperCase());
-      router.push('/options/comment')
+      window.localStorage.setItem('examen', formData.examen.toUpperCase());
+      router.push('/options/comment');
     }
   };
 
@@ -27,6 +31,18 @@ export default function NextStepPage() {
     router.push('/options');
   };
 
+  // Renderizar un estado de carga mientras verificamos si estamos en el cliente
+  if (!isClient) {
+    return (
+      <div className="py-8 flex justify-center">
+        <div className="max-w-lg mx-auto">
+          <div className="p-6 bg-white rounded-xl shadow-sm border border-slate-100 text-center">
+            <p className="text-slate-600">Cargando...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (diagnostico === 'DM3' || diagnostico === 'DM4') {
     return (
@@ -98,23 +114,22 @@ export default function NextStepPage() {
             </div>
 
             <div className="flex gap-4 pt-4">
-            <button 
-              onClick={handleBack}
-              className="flex-1 px-6 py-3 bg-white rounded-xl shadow-sm border
-                       border-blue-500 hover:shadow-md
-                       transition-all duration-200 text-blue-600 font-semibold"
-            >
-              Volver a diagnósticos
-            </button>
+              <button 
+                onClick={handleBack}
+                className="flex-1 px-6 py-3 bg-white rounded-xl shadow-sm border
+                         border-blue-500 hover:shadow-md
+                         transition-all duration-200 text-blue-600 font-semibold"
+              >
+                Volver a diagnósticos
+              </button>
               
               <button
                 onClick={handleSubmit}
-                
-                className="flex-1 px-6 py-3 bg-blue-500 rounded-xl shadow-sm
-                     hover:bg-blue-600 hover:shadow-md
-                     transition-all duration-200 text-white font-semibold
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     disabled:hover:bg-blue-500 disabled:hover:shadow-sm"
+                className="flex-1 px-6 py-3 bg-blue-600 rounded-xl shadow-sm
+                       hover:bg-blue-800 hover:shadow-md
+                       transition-all duration-200 text-white font-semibold
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       disabled:hover:bg-blue-500 disabled:hover:shadow-sm"
                 disabled={!formData.diagnostico.trim() || !formData.examen.trim()}
               >
                 Siguiente

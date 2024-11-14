@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import CurrentInfo from './CurrentInfo';
 import ProgressSteps from './ProgressSteps';
 
@@ -71,14 +70,6 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
     { value: 'Tomografía por Emisión de Positrones (PET)', label: 'Tomografía por Emisión de Positrones (PET)', description: 'Para evaluar la actividad metabólica de los tumores' },
     { value: 'Pruebas de Función Hepática', label: 'Pruebas de Función Hepática', description: 'Para detectar insuficiencia hepática' },
   ]
-
-  const examenes = [
-    { value: 'Hemograma', label: 'Hemograma', description: 'Análisis completo de células sanguíneas' },
-    { value: 'Electrocardiograma', label: 'Electrocardiograma', description: 'Registro de la actividad eléctrica del corazón' },
-    { value: 'Tomografía', label: 'Tomografía', description: 'Imágenes detalladas por secciones' },
-    { value: 'Resonancia magnética', label: 'Resonancia magnética', description: 'Imágenes detalladas usando campos magnéticos' },
-    { value: 'Pruebas de función hepática', label: 'Pruebas de función hepática', description: 'Evaluación del funcionamiento del hígado' }
-  ];
 
   return (
     <div className="py-8">
@@ -222,7 +213,7 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
         <button
           onClick={handleSubmit}
           disabled={selectedExams.length === 0}
-          className="px-6 py-3 bg-blue-500 rounded-xl shadow-sm hover:bg-blue-600 hover:shadow-md
+          className="px-6 py-3 bg-blue-600 rounded-xl shadow-sm hover:bg-blue-700 hover:shadow-md
                    transition-all duration-200 text-white font-semibold min-w-[200px]
                    disabled:opacity-50 disabled:cursor-not-allowed"
         >

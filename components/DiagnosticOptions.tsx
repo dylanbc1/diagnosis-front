@@ -11,7 +11,7 @@ export default function DiagnosticoOpciones() {
   const handleBack = () => router.push('/');
 
   const handleSubmit = () => {
-    // Lógica de envío a la API
+    console.log(examen)
   };
 
   if (diagnostico === 'DM3' || diagnostico === 'DM4') {

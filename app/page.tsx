@@ -1,21 +1,23 @@
 'use client'
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 // Página inicial mejorada
 const HomePage = () => {
   const router = useRouter();
   const [grupo, setGrupo] = useState('');
 
-  const handleGroupChange = (e: any) => {
+  const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGrupo(e.target.value);
   };
 
   const handleStart = () => {
     if (grupo) {
-      localStorage.setItem('grupo', grupo.toUpperCase());
-      router.push('/options');
+      if (typeof window !== 'undefined' || localStorage != null || localStorage != undefined) {
+        localStorage.setItem('grupo', grupo.toUpperCase());
+        router.push('/options');
+      }
     } else {
       // Toast notification would be better here
       alert('Por favor, selecciona un grupo.');
@@ -40,7 +42,7 @@ const HomePage = () => {
                        focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                        text-slate-600 appearance-none"
             value={grupo}
-            onChange={handleGroupChange}
+            onChange={(e) => handleGroupChange(e)}
           >
             <option value="" disabled>Seleccione su grupo</option>
             {['BP2 - David Mera y Juan Diego Jaramillo', 'BP3 - Juliana Gonzalez, Maria Paz Chavarro y Alejandra Barrera', 
