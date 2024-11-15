@@ -11,6 +11,20 @@ export default function ComentariosAdicionales() {
   const [isClient, setIsClient] = useState(false);
   const [grupo, setGrupo] = useState<string | null>(null);
 
+  const formattedExams = (exams: string | null) => {
+    let fExams = "";
+
+    if (exams != null) {
+        for (let i = 0; i < exams.length; i++) {
+            if (exams[i] != "[" && exams[i] != "]" && exams[i] != "\"") {
+                fExams += exams[i]
+            }
+        }
+    }
+
+    return fExams
+  }
+
   useEffect(() => {
     setIsClient(true);
     const storedGrupo = window.localStorage.getItem('grupo');
@@ -24,11 +38,12 @@ export default function ComentariosAdicionales() {
   const handleSubmit = async () => {
     window.localStorage.setItem('comentarios', comentarios);
     try {
-      await axios.post('http://localhost:8000/api/v1/diagnostico', {
-        grupo: grupo,
-        diagnostico: window.localStorage.getItem('diagnostico'),
-        examen: window.localStorage.getItem('examen'),
-        comentarios: window.localStorage.getItem('comentarios')
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/answers`, {
+        group: grupo,
+        diagnosis: window.localStorage.getItem('diagnostico'),
+        exams: formattedExams(window.localStorage.getItem('examen')),
+        arguments: window.localStorage.getItem('comentarios'),
+        professor_name: window.localStorage.getItem('profesor') || 'No_Prof'
       });
       alert('Respuesta enviada con éxito');
     } catch (error) {
