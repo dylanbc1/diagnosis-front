@@ -37,6 +37,8 @@ export default function ComentariosAdicionales() {
 
   const handleSubmit = async () => {
     window.localStorage.setItem('comentarios', comentarios);
+    console.log(`Sending answers to... ${process.env.NEXT_PUBLIC_API_URL}`)
+
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/answers`, {
         group: grupo,
