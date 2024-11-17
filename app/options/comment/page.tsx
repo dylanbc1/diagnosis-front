@@ -37,10 +37,14 @@ export default function ComentariosAdicionales() {
 
   const handleSubmit = async () => {
     window.localStorage.setItem('comentarios', comentarios);
+
+    const API_URL = 'https://diagnosis-back.onrender.com/answers';
+    
     console.log(`Sending answers to... ${process.env.NEXT_PUBLIC_API_URL}`)
+    console.log(`Sending answers to (burnt)... ${API_URL}`)
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/answers`, {
+      await axios.post(API_URL, {
         group: grupo,
         diagnosis: window.localStorage.getItem('diagnostico'),
         exams: formattedExams(window.localStorage.getItem('examen')),
