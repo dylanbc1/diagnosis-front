@@ -10,20 +10,19 @@ export default function ComentariosAdicionales() {
   const [comentarios, setComentarios] = useState('');
   const [isClient, setIsClient] = useState(false);
   const [grupo, setGrupo] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formattedExams = (exams: string | null) => {
     let fExams = "";
-
     if (exams != null) {
-        for (let i = 0; i < exams.length; i++) {
-            if (exams[i] != "[" && exams[i] != "]" && exams[i] != "\"") {
-                fExams += exams[i]
-            }
+      for (let i = 0; i < exams.length; i++) {
+        if (exams[i] !== "[" && exams[i] !== "]" && exams[i] !== "\"") {
+          fExams += exams[i];
         }
+      }
     }
-
-    return fExams
-  }
+    return fExams;
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -37,12 +36,10 @@ export default function ComentariosAdicionales() {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true); // Activar estado de carga
     window.localStorage.setItem('comentarios', comentarios);
 
     const API_URL = 'https://gran-sesion-back.politewater-d3bfd80e.centralus.azurecontainerapps.io/answers';
-    
-    console.log(`Sending answers to... ${process.env.NEXT_PUBLIC_API_URL}`)
-    console.log(`Sending answers to (burnt)... ${API_URL}`)
 
     try {
       await axios.post(API_URL, {
@@ -50,11 +47,13 @@ export default function ComentariosAdicionales() {
         diagnosis: window.localStorage.getItem('diagnostico'),
         exams: formattedExams(window.localStorage.getItem('examen')),
         arguments: window.localStorage.getItem('comentarios'),
-        professor_name: window.localStorage.getItem('profesor') || 'No_Prof'
+        professor_name: window.localStorage.getItem('profesor') || 'No_Prof',
       });
       alert('Respuesta enviada con éxito');
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false); // Desactivar estado de carga
     }
   };
 
@@ -63,7 +62,6 @@ export default function ComentariosAdicionales() {
     router.push('/options/test');
   };
 
-  // Mostrar estado de carga mientras verificamos si estamos en el cliente
   if (!isClient) {
     return (
       <div className="py-8 flex justify-center">
@@ -111,13 +109,14 @@ export default function ComentariosAdicionales() {
             
           <button
             onClick={handleSubmit}
+            disabled={isLoading} // Desactivar botón si está cargando
             className="flex-1 px-6 py-3 bg-blue-600 rounded-xl shadow-sm
                    hover:bg-blue-700 hover:shadow-md
                    transition-all duration-200 text-white font-semibold
                    disabled:opacity-50 disabled:cursor-not-allowed
                    disabled:hover:bg-blue-500 disabled:hover:shadow-sm"
           >
-            Enviar respuesta
+            {isLoading ? 'Enviando...' : 'Enviar respuesta'} {/* Mostrar texto dinámico */}
           </button>
         </div>
       </div>
