@@ -11,6 +11,7 @@ export default function DiagnosticoOpciones() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    window.localStorage.removeItem('diagnostico');
     setIsClient(true);
   }, []);
 
@@ -32,7 +33,7 @@ export default function DiagnosticoOpciones() {
     { id: 'ACV Isquémico', label: 'ACV Isquémico', description: 'Ataque Cerebrovascular', parent: 'acv' },
     { id: 'ACV Hemorrágico', label: 'ACV Hemorrágico', description: 'Ataque Cerebrovascular', parent: 'acv' },
     { id: 'Meningitis Aséptica', label: 'Meningitis Aséptica', description: 'Infección de S.N.C.' },
-    { id: 'Astrocitoma', label: 'Astrocitoma', description: 'Tumor Cerebral' },
+    { id: 'Glioma', label: 'Glioma', description: 'Tumor Cerebral' },
     { id: 'Meningioma', label: 'Meningioma', description: 'Tumor Cerebral' },
     { id: 'Encefalopatía Hipertensiva', label: 'Encefalopatía Hipertensiva', description: 'Crisis Hipertensiva con Encefalopatía' },
     { id: 'Otra', label: 'Otra opción', description: 'Especificar otro diagnóstico' },

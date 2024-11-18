@@ -1,20 +1,31 @@
 'use client'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { group } from 'console';
 
 // Página inicial mejorada
 const HomePage = () => {
   const router = useRouter();
   const [grupo, setGrupo] = useState('');
+  const [nombreProfe, setNombreProfe] = useState('');
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGrupo(e.target.value);
   };
 
+  useEffect(() => {
+    window.localStorage.clear();
+  })
+
+  const handleProfesorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNombreProfe(e.target.value);
+  };
+
   const handleStart = () => {
     if (grupo) {
       if (typeof window !== 'undefined' || localStorage != null || localStorage != undefined) {
+        localStorage.setItem('profesor', nombreProfe.toUpperCase());
         localStorage.setItem('grupo', grupo.toUpperCase());
         router.push('/options');
       }
@@ -47,10 +58,28 @@ const HomePage = () => {
             <option value="" disabled>Seleccione su grupo</option>
             {['BP2 - David Mera y Juan Diego Jaramillo', 'BP3 - Juliana Gonzalez, Maria Paz Chavarro y Alejandra Barrera', 
             'BP8 - Isabella Tovar, Gabriela Pino y Sebastián Moya', 'BP9 - Miguel Tejada, Alejandro Angulo y Samuel Daza', 
-            'BP10 - Luna Orozco, Valentina Valderrama, Angie Suárez y Juliana Lozano'].map((g) => (
+            'BP10 - Luna Orozco, Valentina Valderrama, Angie Suárez y Juliana Lozano', 'Docente'].map((g) => (
               <option key={g} value={g.toLowerCase().replace(' ', '')}>{g}</option>
             ))}
           </select>
+          
+          {grupo == 'docente' ? 
+            <>
+          <textarea
+            className="w-full px-4 py-3 rounded-xl border border-slate-100 
+                     shadow-sm hover:border-blue-500 hover:shadow-md
+                     transition-all duration-200 text-slate-600
+                     focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            placeholder="Nombre profesor"
+            rows={1}
+            value={nombreProfe}
+            onChange={(e) => handleProfesorChange(e)}
+          />
+            </>
+          :
+            <>
+            </>
+          }
 
           <button
             onClick={handleStart}

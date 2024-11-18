@@ -28,6 +28,7 @@ export default function ComentariosAdicionales() {
   useEffect(() => {
     setIsClient(true);
     const storedGrupo = window.localStorage.getItem('grupo');
+    window.localStorage.removeItem('comentarios');
     setGrupo(storedGrupo);
   }, []);
 

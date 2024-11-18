@@ -34,11 +34,14 @@ export default function RootLayout({
             style={{
               backgroundImage: "url('https://res.cloudinary.com/dxhi8xsyb/image/upload/v1731363405/propuesta2_mhnzja.jpg')",
             }}
-          ></div>
+          >
+          </div>
           
-          {/* Contenido principal con opacidad para asegurarse que es legible */}
-          <div className="relative max-w-4xl mx-auto p-6 bg-white bg-opacity-90 shadow-lg">
-            {children}
+          <div className="relative flex items-center justify-center min-h-screen">
+          {/* Contenido principal con ancho ajustable */}
+            <div className="w-full max-w-5xl mx-auto p-6 bg-white bg-opacity-90 shadow-lg">
+              {children}
+            </div>
           </div>
         </div>
       </body>

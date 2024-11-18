@@ -21,7 +21,7 @@ export default function Bienvenida() {
       const API_URL = 'https://diagnosis-back.onrender.com/answers';
 
       try {
-        const response = await axios.get<Answer[]>(API_URL); // Tipamos la respuesta como un array de `Answer`
+        const response = await axios.get<Answer[]>(API_URL);
         setAnswers(response.data);
       } catch (error) {
         console.error('Error fetching answers:', error);

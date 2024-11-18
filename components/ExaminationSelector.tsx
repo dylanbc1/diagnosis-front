@@ -146,7 +146,7 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
                     </>
                   :
                     <>
-                      {diagnostico == 'ASTROCITOMA' ? 
+                      {diagnostico == 'GLIOMA' ? 
                         <>
                           {examenes_astrocitoma.map((exam) => (
                         <button
