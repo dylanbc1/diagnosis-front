@@ -13,9 +13,10 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
   const [selectedExams, setSelectedExams] = useState<string[]>([]);
 
   useEffect(() => {
-    const storedExams = JSON.parse(localStorage.getItem('examen') || '[]');
-    if (Array.isArray(storedExams)) setSelectedExams(storedExams);
-  }, []);
+    //const storedExams = JSON.parse(localStorage.getItem('examen') || '[]');
+    //if (Array.isArray(storedExams)) setSelectedExams(storedExams);
+    window.localStorage.removeItem('examen'); 
+  });
 
   const toggleExamSelection = (exam: string) => {
     setSelectedExams((prev) => {
@@ -28,6 +29,7 @@ const ExaminationSelector = ({ diagnostico }: Props) => {
   };
 
   const handleSubmit = () => {
+    window.localStorage.setItem('examen', JSON.stringify(selectedExams))
     router.push('/options/comment')
   };
 

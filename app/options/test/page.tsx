@@ -22,6 +22,7 @@ export default function NextStepPage() {
 
   const handleSubmit = () => {
     if (formData.diagnostico.trim() && formData.examen.trim()) {
+      window.localStorage.setItem('diagnostico', formData.diagnostico.toUpperCase())
       window.localStorage.setItem('examen', formData.examen.toUpperCase());
       router.push('/options/comment');
     }
@@ -70,7 +71,9 @@ export default function NextStepPage() {
     );
   } 
   
-  if (diagnostico === 'OTRA') {
+  if (diagnostico != 'ACV ISQUÉMICO' && diagnostico != 'ACV HEMORRÁGICO' && diagnostico != 'MENINGITIS ASÉPTICA' && 
+    diagnostico != 'GLIOMA' && diagnostico != 'MENINGIOMA' && diagnostico != 'ENCEFALOPATÍA HIPERTENSIVA'   
+  ) {
     return (
       <div className="py-8">
         <ProgressSteps currentStep='two'></ProgressSteps>
