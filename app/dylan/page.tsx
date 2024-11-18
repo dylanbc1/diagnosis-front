@@ -18,7 +18,7 @@ export default function Bienvenida() {
 
   useEffect(() => {
     const fetchAnswers = async () => {
-      const API_URL = 'https://diagnosis-back.onrender.com/answers';
+      const API_URL = 'https://gran-sesion-back.politewater-d3bfd80e.centralus.azurecontainerapps.io/answers';
 
       try {
         const response = await axios.get<Answer[]>(API_URL);

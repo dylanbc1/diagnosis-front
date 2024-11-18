@@ -39,7 +39,7 @@ export default function ComentariosAdicionales() {
   const handleSubmit = async () => {
     window.localStorage.setItem('comentarios', comentarios);
 
-    const API_URL = 'https://diagnosis-back.onrender.com/answers';
+    const API_URL = 'https://gran-sesion-back.politewater-d3bfd80e.centralus.azurecontainerapps.io/answers';
     
     console.log(`Sending answers to... ${process.env.NEXT_PUBLIC_API_URL}`)
     console.log(`Sending answers to (burnt)... ${API_URL}`)
